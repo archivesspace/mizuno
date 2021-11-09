@@ -15,10 +15,11 @@ require 'mizuno/reloader'
 
 module Mizuno
     class Server
-        java_import 'org.eclipse.jetty.server.nio.SelectChannelConnector'
+        java_import 'org.eclipse.jetty.server.nio.NetworkTrafficSelectChannelConnector'
         java_import 'org.eclipse.jetty.util.thread.QueuedThreadPool'
         java_import 'org.jruby.rack.servlet.RewindableInputStream'
-        java_import "org.eclipse.jetty.server.ssl.SslSelectChannelConnector"
+
+        # java_import "org.eclipse.jetty.server.ssl.SslSelectChannelConnector"
 
         attr_accessor :logger
 
@@ -33,7 +34,7 @@ module Mizuno
         end
 
         def Server.stop
-            @lock.synchronize do 
+            @lock.synchronize do
                 return unless @server
                 @server.stop
                 @server = nil
@@ -50,45 +51,46 @@ module Mizuno
         # case-sensitive:
         #
         # :host::
-        #     String specifying the IP address to bind to; defaults 
+        #     String specifying the IP address to bind to; defaults
         #     to 0.0.0.0.
         #
         # :port::
-        #     String or integer with the port to bind to; defaults 
+        #     String or integer with the port to bind to; defaults
         #     to 9292.
         #
         def run(app, options = {})
             # Symbolize and downcase keys.
-            @options = options = Hash[options.map { |k, v| 
+            @options = options = Hash[options.map { |k, v|
                 [ k.to_s.downcase.to_sym, v ] }]
             options[:quiet] ||= true if options[:embedded]
-
-            # The Jetty server
-            Logger.configure(options)
-            @logger = Logger.logger
-            @server = Java.org.eclipse.jetty.server.Server.new
-            @server.setSendServerVersion(false)
 
             # Thread pool
             threads = options[:threads] || 50
             thread_pool = QueuedThreadPool.new
             thread_pool.min_threads = options.fetch(:min_threads,
-                [ threads.to_i / 10, 5 ].max)
+                                                    [ threads.to_i / 10, 5 ].max)
             thread_pool.max_threads = [ threads.to_i, 10 ].max
-            @server.set_thread_pool(thread_pool)
+
+            # The Jetty server
+            Logger.configure(options)
+            @logger = Logger.logger
+            @server = Java.org.eclipse.jetty.server.Server.new(thread_pool)
+#            @server.setSendServerVersion(false)
+
+#            @server.set_thread_pool(thread_pool)
 
             # Connector
-            connector = SelectChannelConnector.new
+            connector = Java.org.eclipse.jetty.server.ServerConnector.new(@server)
             connector.setReuseAddress(options.fetch(:reuse_address, false))
             connector.setPort(options[:port].to_i)
             connector.setHost(options[:host])
-            max_header_size = options.fetch(:max_header_size, 32768)
-            connector.setRequestHeaderSize(max_header_size)
-            
+            # max_header_size = options.fetch(:max_header_size, 32768)
+            # connector.setRequestHeaderSize(max_header_size)
+
             @server.addConnector(connector)
 
             # SSL Connector
-            configure_https(options) if options[:ssl_port]
+            #configure_https(options) if options[:ssl_port]
 
             # Switch to a different user or group if we were asked to.
             Runner.setgid(options) if options[:group]
@@ -152,14 +154,14 @@ module Mizuno
 
         private
 
-        def configure_https(options)
-            connector = SslSelectChannelConnector.new
-            connector.setPort(options[:ssl_port])
-            factory = connector.getSslContextFactory
-            factory.setKeyStore(options[:keystore] || "keystore")
-            factory.setKeyStorePassword(options[:keystore_password])
-            @server.addConnector(connector)
-            self
-        end
+        # def configure_https(options)
+        #     connector = SslSelectChannelConnector.new
+        #     connector.setPort(options[:ssl_port])
+        #     factory = connector.getSslContextFactory
+        #     factory.setKeyStore(options[:keystore] || "keystore")
+        #     factory.setKeyStorePassword(options[:keystore_password])
+        #     @server.addConnector(connector)
+        #     self
+        # end
     end
 end
