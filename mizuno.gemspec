@@ -6,10 +6,10 @@ Gem::Specification.new do |spec|
     spec.version = Mizuno::VERSION
     spec.required_rubygems_version = Gem::Requirement.new(">= 1.2") \
         if spec.respond_to?(:required_rubygems_version=)
-    spec.authors = [ "Don Werve" ]
+    spec.authors = [ "Don Werve", "ArchivesSpace" ]
     spec.description = 'Jetty-powered running shoes for JRuby/Rack.'
     spec.summary = 'Rack handler for Jetty 8 on JRuby. Features multithreading, event-driven I/O, and async support.'
-    spec.email = 'don@madwombat.com'
+    spec.email = 'ArchivesSpaceHome@lyrasis.org'
     spec.executables = [ "mizuno" ]
     # FIXME: Use Dir.glob for this
     spec.files = %w(.gitignore
@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
     spec.files.concat(Dir['lib/**/*.jar'])
 #    jars = Dir.entries("lib/java").grep(/\.jar$/)
 #    spec.files.concat(jars.map { |j| "lib/java/#{j}" })
-    spec.homepage = 'http://github.com/matadon/mizuno'
+    spec.homepage = 'http://github.com/archivesspace/mizuno'
     spec.has_rdoc = false
     spec.require_paths = [ "lib" ]
     spec.rubygems_version = '1.3.6'

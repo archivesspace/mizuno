@@ -1,41 +1,18 @@
-[![Code Climate](https://codeclimate.com/github/matadon/mizuno/badges/gpa.svg)](https://codeclimate.com/github/matadon/mizuno)
+This is the fork of Don Werve's mizuno gem used by ArchivesSpace. We
+use this gem to create a Rack-like Jetty environment for ArchivesSpace
+development servers. It comes without warranty or anything like that.
 
-Mizuno is a set of Jetty-powered running shoes for JRuby/Rack.
+See the [upstream source](https://github.com/matadon/mizuno) for more info.
 
-To use Mizuno with your Rack app:
+Note: we version this gem by copying the version of the embedded Jetty distribution.
 
-    gem install mizuno
-    cd /path/to/my/rack/app
-    mizuno
-
-...and you're off and running.  You don't need to set up a Java web
-container for your Rack application to run under JRuby, because Mizuno
-works just like Mongrel, WEBRick, Thin, or any other standard Rack
-handler.
-
-Mizuno also supports asynchronous request handling, via the Java Servlet
-3.0 asynchronous processing mechanism
-
-All the speed comes from Jetty 8; Mizuno just ties it to Rack through
-JRuby's Ruby/Java integration layer.
-
-Note that Mizuno is NOT a direct replacement for jruby-rack or Warbler,
-because it doesn't produce WAR files or make any attempt to package a
-Rack application for installation in a Java web container.
-
-You can also run Mizuno via rackup:
-
-    rackup -s mizuno
-
-Or with live reloading support:
-
-    mizuno --reloadable
+From the upstream source:
 
 Mizuno is licensed under the Apache Public License, version 2.0; see
-the LICENSE file for details, and was developed on behalf of 
+the LICENSE file for details, and was developed on behalf of
 [Mad Wombat Software](http://www.madwombat.com)
 
-Jetty is dual-licensed under the [Eclipse and Apache open-source 
+Jetty is dual-licensed under the [Eclipse and Apache open-source
 licenses](http://www.eclipse.org/jetty/licenses.php), and its
-development is hosted by the [Eclipse 
+development is hosted by the [Eclipse
 Foundation](http://www.eclipse.org/jetty/)

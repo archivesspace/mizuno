@@ -1,3 +1,3 @@
 module Mizuno
-    VERSION = "0.0.0"
+    VERSION = "9.4.44"
 end
