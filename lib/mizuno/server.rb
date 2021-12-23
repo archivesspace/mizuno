@@ -10,7 +10,7 @@ Mizuno.require_jars(%w(jetty-continuation jetty-http jetty-io jetty-jmx
 require 'mizuno/version'
 require 'mizuno/rack/chunked'
 require 'mizuno/rack_handler'
-require 'mizuno/logger'
+#require 'mizuno/logger'
 require 'mizuno/reloader'
 
 module Mizuno
@@ -21,7 +21,7 @@ module Mizuno
 
         # java_import "org.eclipse.jetty.server.ssl.SslSelectChannelConnector"
 
-        attr_accessor :logger
+        # attr_accessor :logger
 
         @lock ||= Mutex.new
 
@@ -72,8 +72,8 @@ module Mizuno
             thread_pool.max_threads = [ threads.to_i, 10 ].max
 
             # The Jetty server
-            Logger.configure(options)
-            @logger = Logger.logger
+            # Logger.configure(options)
+            # @logger = Logger.logger
             @server = Java.org.eclipse.jetty.server.Server.new(thread_pool)
 #            @server.setSendServerVersion(false)
 

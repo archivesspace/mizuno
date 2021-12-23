@@ -17,11 +17,11 @@ module Mizuno
     # log4j.properties file, as we configure it programmatically in
     # Mizuno::Server (http://stackoverflow.com/questions/6849887)
     #
-    def Mizuno.initialize_logger
-        require_jars(%w(log4j slf4j-api slf4j-log4j12))
-        Java.org.apache.log4j.Logger.getRootLogger.setLevel( \
-            Java.org.apache.log4j.Level::INFO)
-    end
+    # def Mizuno.initialize_logger
+    #     require_jars(%w(log4j slf4j-api slf4j-log4j12))
+    #     Java.org.apache.log4j.Logger.getRootLogger.setLevel( \
+    #         Java.org.apache.log4j.Level::INFO)
+    # end
 
     #
     # Loads jarfiles independent of versions.
@@ -36,4 +36,4 @@ module Mizuno
     end
 end
 
-Mizuno.initialize_logger
+#Mizuno.initialize_logger

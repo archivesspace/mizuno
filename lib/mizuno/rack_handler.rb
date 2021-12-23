@@ -39,7 +39,7 @@ module Mizuno
         # the way out.
         #
         # Also, we implement a common extension to the Rack api for
-        # asynchronous request processing.  We supply an 'async.callback' 
+        # asynchronous request processing.  We supply an 'async.callback'
         # parameter in env to the Rack application.  If we catch an
         # :async symbol thrown by the app, we initiate a Jetty continuation.
         #
@@ -60,7 +60,7 @@ module Mizuno
                 # We should never be re-dispatched.
                 raise("Request re-dispatched.") unless continuation.isInitial
 
-                # Add our own special bits to the rack environment so that 
+                # Add our own special bits to the rack environment so that
                 # Rack middleware can have access to the Java internals.
                 env['rack.java.servlet'] = true
                 env['rack.java.servlet.request'] = request
@@ -78,7 +78,7 @@ module Mizuno
                 # Execute the Rack request.
                 catch(:async) do
                     rack_response = @app.call(env)
-                   
+
                     # For apps that don't throw :async.
                     unless(rack_response[0] == -1)
                         # Nope, nothing asynchronous here.
@@ -152,8 +152,8 @@ module Mizuno
                 if env["HTTP_CONTENT_LENGTH"]
 
             # Route errors through the logger.
-            env['rack.errors'] ||= @server.logger
-            env['rack.logger'] ||= @server.logger
+            # env['rack.errors'] ||= @server.logger
+            # env['rack.logger'] ||= @server.logger
 
             # All done, hand back the Rack request.
             return(env)
@@ -166,7 +166,7 @@ module Mizuno
         # false otherwise.
         #
         # Note that keep-alive *only* happens if we get either a pathname
-        # (because we can find the length ourselves), or if we get a 
+        # (because we can find the length ourselves), or if we get a
         # Content-Length header as part of the response.  While we can
         # readily buffer the response object to figure out how long it is,
         # we have no guarantee that we aren't going to be buffering
@@ -184,7 +184,7 @@ module Mizuno
                 body.respond_to?(:empty?) and body.empty?)
             return(true) if (finished and response.isCommitted)
 
-            # No need to send headers again if we've already shipped 
+            # No need to send headers again if we've already shipped
             # data out on an async request.
             unless(response.isCommitted)
                 # Set the HTTP status code.
@@ -248,7 +248,8 @@ module Mizuno
                 message = "Exception: #{error}"
                 message << "\n#{error.backtrace.join("\n")}" \
                     if (error.respond_to?(:backtrace))
-                Server.logger.error(message)
+                #Server.logger.error(message)
+                $stderr.puts(message)
                 return if response.isCommitted
                 response.reset
                 response.setStatus(500)
